@@ -35,4 +35,8 @@ Note that I obviously make no claim that this application is perfectly safe to u
 something up due to a bug, it is ultimately not my fault. The user takes full responsibility for any losses
 caused by using this application, even when used correctly and as intended.
 
+# Signing a transaction
+To sign a transaction with a single key, `POST` the hex transaction as plain, unquoted text to HTTP endpoint `/sign`:
+    curl -H "Content-Type: text/plain;charset=utf-8" -d "0100000003ae3f2c203d92f47e207740a02cefb06550a699b4c458544bf41cf1f759107bb10100000000ffffffff92172b1165f32195f44292c07626fe99d5a5ed867cb9f5d7793862c8ffffff053c0b6af96f8bc6d09c373e649d26d9920f855f61ca315d421554d5a7def84d0100000000ffffffff02002d3101000000001976a91481f1e58aeedf48b66815f513a6aaf6a6cad875f188acf4a2fc0b0000000017a91443e5fee10ca1666bdd38c49f6931aba2f145b6258700000000" http://localhost:8080/sign
+
 [stack]: http://docs.haskellstack.org/en/stable/install_and_upgrade.html
