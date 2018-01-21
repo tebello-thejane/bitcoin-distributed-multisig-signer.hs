@@ -1,0 +1,20 @@
+# For illustration purposes, the full set of private keys for this (testnet)
+# 2-of-3 multisig wallet are (deterministically sorted in order of public
+# keys as per BIP67):
+#
+# 91vMrCGX2WA5HjjPmBQP5FvbEH4Eu1NKK7Y1gmxFNJA2pGVnH3y
+# 91x2hnoEEQWET6WMTuSmiNYsqi5Ah8UZxkaxch89y6GPDutqMvB
+# 92LLu16QpnsZUZTRuqLQyvoY8UXYtLiJXVevZ2GwhVGzhpGPkZ2
+#
+# Of course, for a real-world application we wouldn't document all the private
+# keys for the wallet in one place as we just did above...
+
+private-key: 91vMrCGX2WA5HjjPmBQP5FvbEH4Eu1NKK7Y1gmxFNJA2pGVnH3y
+
+# Simple multisig redeem script specifying that 2 of the above 3 public keys
+# (sorted) may be used to spend.
+redeem-script: 524104278c2696fabc8895dadceeeaaf2d9a86bb37a299c9f10ea62c3be690482aaad4219a61877e6387453369ba84b25c86b5921f09f4402270a8352b4bdd30b22a254104be0ed5af22735b0362c50aba76312c5661682abc19708225c467f79048d54e996afc4a6451c9872481fb83121a82e77c4f06933619afddc6683277dd9cc859844104850ce3e3b232029f4a1989e99741ba1e1d7351b0619d045207f738429962f9329639324ec07e44ce8025642f92bad3166cd82f6d07799b3f9f7d7547325bd06553ae
+
+# Script (multisig) address is implicitely whitelisted as a change address.
+address-whitelist:
+  - msN3F5FbjRvUNrGH4BHzFVKbMX2PcyAAiv

@@ -1,0 +1,37 @@
+name: bitcoin-distributed-multisig-signer
+version: '0.1.0.0'
+synopsis: Multisig signer for distributed bitcoin address
+category: Web
+author: Tebello Thejane
+maintainer: zyxoas@gmail.com
+copyright: 2018 Tebello Thejane
+license: BSD3
+homepage: https://github.com/githubuser/bitcoin-distributed-multisig-signer#readme
+extra-source-files:
+- README.md
+ghc-options: -Wall
+
+dependencies:
+- base >=4.7 && <5
+- haskoin-core
+- servant-server
+- aeson
+- wai
+- warp
+- text
+- bytestring
+- base16-bytestring
+- unix
+- yaml
+- string-conv
+- safe
+- optparse-applicative
+- semigroups
+- bytestring
+- cereal
+- wai-extra
+
+executables:
+  bitcoin-distributed-multisig-signer:
+    main: Main.hs
+    source-dirs: src
