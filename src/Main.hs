@@ -33,20 +33,20 @@ checkSecurity :: Bool -> FilePath -> IO ()
 checkSecurity False configFileName = do
   uid <- getRealUserID
   when (uid == 0) $
-    error "ERROR: This signer should not be run under ROOT user."
+    errorWithoutStackTrace "ERROR: This signer should not be run under ROOT user."
 
   configExists <- fileExist configFileName
   unless configExists $
-    error "ERROR: Cannot find config file in current directory."
+    errorWithoutStackTrace "ERROR: Cannot find config file in current directory."
 
   configStatus <- getFileStatus configFileName
   unless (uid == fileOwner configStatus) $
-    error "ERROR: Current user must own config file."
+    errorWithoutStackTrace "ERROR: Current user must own config file."
 
   let badMode = unionFileModes groupModes otherModes
 
   unless (intersectFileModes badMode (fileMode configStatus) == nullFileMode) $
-    error "ERROR: Config file permissions are too permissive."
+    errorWithoutStackTrace "ERROR: Config file permissions are too permissive."
 checkSecurity True configFileName = do
   uid <- getRealUserID
   when (uid == 0) $
@@ -54,7 +54,7 @@ checkSecurity True configFileName = do
 
   configExists <- fileExist configFileName
   unless configExists $
-    error "ERROR: Cannot find config file in current directory."
+    errorWithoutStackTrace "ERROR: Cannot find config file in current directory."
 
   configStatus <- getFileStatus configFileName
   unless (uid == fileOwner configStatus) $
@@ -63,7 +63,7 @@ checkSecurity True configFileName = do
   let badMode = unionFileModes groupModes otherModes
 
   unless (intersectFileModes badMode (fileMode configStatus) == nullFileMode) $
-    error "WARNING: Config file permissions are too permissive. Ignoring since we are in testnet mode."
+    putStrLn "WARNING: Config file permissions are too permissive. Ignoring since we are in testnet mode."
 
 data CmdOptions = CmdOptions {
   port       :: Int,
