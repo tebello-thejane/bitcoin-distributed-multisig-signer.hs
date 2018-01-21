@@ -125,6 +125,8 @@ main = do
 
   cfg <- getConfig (configFile options)
 
+  checkSecurity (testnet options) (configFile options)
+
   run (port options) $ logStdoutDev $ serve (Proxy @API) $ server cfg
 
 instance MimeUnrender PlainText Tx where
