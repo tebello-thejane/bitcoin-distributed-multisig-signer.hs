@@ -139,7 +139,7 @@ instance MimeUnrender PlainText Tx where
     where
       (unHex, bad) = Base16.decode $ strConv Strict bs
 
-type API = "sign" :> ReqBody '[PlainText] Tx :> Post '[JSON] String
+type API = "sign" :> ReqBody '[PlainText] Tx :> Post '[PlainText] String
 
 server :: Config -> Server API
 server (Config prv scr wl) tx = do
