@@ -137,7 +137,7 @@ instance MimeUnrender PlainText Tx where
     else
       Serialise.decode unHex
     where
-      (unHex, bad) = Base16.decode $ strConv Strict bs
+      (unHex, bad) = Base16.decode $ toS bs
 
 type API = "sign" :> ReqBody '[PlainText] Tx :> Post '[PlainText] String
 
@@ -151,13 +151,13 @@ server (Config prv scr wl) tx = do
     let (Right so) = dso
     case so of
       PayPKHash adr ->
-        when (adr `notElem` scrAddr:wl) $ throwError $ err400 {errBody = "Address " <> strConv Strict (show adr) <> " is not in the destination list."}
+        when (adr `notElem` scrAddr:wl) $ throwError $ err400 {errBody = "Address " <> toS (show adr) <> " is not in the destination list."}
       PayScriptHash adr ->
-        when (adr `notElem` scrAddr:wl) $ throwError $ err400 {errBody = "Address " <> strConv Strict (show adr) <> " is not in the destination list."}
-      _ -> throwError $ err400 {errBody = "Bad script output type (not an address): " <> strConv Strict (show so)}
+        when (adr `notElem` scrAddr:wl) $ throwError $ err400 {errBody = "Address " <> toS (show adr) <> " is not in the destination list."}
+      _ -> throwError $ err400 {errBody = "Bad script output type (not an address): " <> toS (show so)}
   let sis = fmap (\(TxIn op _ _) -> SigInput scro op (SigAll False) (Just scr)) (txIn tx)
 
   let signed = signTx tx sis [prv]
   case signed of
-    Right t -> return $ strConv Strict $ Base16.encode $ Serialise.encode t
-    Left e   -> throwError $ err400 {errBody = "Error signing transaction: " <> strConv Strict e}
+    Right t -> return $ toS $ Base16.encode $ Serialise.encode t
+    Left e  -> throwError $ err400 {errBody = "Error signing transaction: " <> toS e}
