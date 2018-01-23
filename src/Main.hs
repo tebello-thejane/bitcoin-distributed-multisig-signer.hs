@@ -132,20 +132,22 @@ main = do
   run (port options) $ logStdoutDev $ serve (Proxy @API)
     $ server scrAddr (PayScriptHash scrAddr) cfg
 
-instance MimeUnrender PlainText Tx where
+newtype MTx = MTx {unMTx :: Tx}
+
+instance MimeUnrender PlainText MTx where
   mimeUnrender _ bs =
     if BS.length bad > 0
     then
       Left "Received Tx payload was not encoded in proper hex."
     else
-      Serialise.decode unHex
+      MTx <$> Serialise.decode unHex
     where
       (unHex, bad) = Base16.decode $ toS bs
 
-type API = "sign" :> ReqBody '[PlainText] Tx :> Post '[PlainText] String
+type API = "sign" :> ReqBody '[PlainText] MTx :> Post '[PlainText] String
 
 server :: Address -> ScriptOutput -> Config -> Server API
-server scrAddr scro (Config prv scr wl) tx = do
+server scrAddr scro (Config prv scr wl) (MTx tx) = do
   forM_ (txOut tx) $ \txo -> do
     let dso = decodeOutputBS $ scriptOutput txo
     unless (isRight dso) $ throwError $ err400 {errBody = "Bad Tx script output."}
