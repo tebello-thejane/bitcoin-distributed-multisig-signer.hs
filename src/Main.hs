@@ -109,7 +109,7 @@ instance FromJSON Config where
     prvWif <- o .: "private-key"
     rdm <- o .: "redeem-script"
     whitelist <- fmap fromString <$> o .: "address-whitelist"
-    return $ Config (fromJustNote "WIF" $ fromWif $ strConv @String Strict prvWif) rdm whitelist
+    return $ Config (fromJustNote "Error parsing private key as WIF." $ fromWif $ toS @String prvWif) rdm whitelist
 
 getConfig :: FilePath -> IO Config
 getConfig configFileName =
