@@ -9,7 +9,10 @@ license: BSD3
 homepage: https://github.com/githubuser/bitcoin-distributed-multisig-signer#readme
 extra-source-files:
 - README.md
-ghc-options: -Wall
+ghc-options:
+- -Wall
+- -funbox-strict-fields
+- -O2
 
 dependencies:
 - base >=4.7 && <5
@@ -35,3 +38,8 @@ executables:
   bitcoin-distributed-multisig-signer:
     main: Main.hs
     source-dirs: src
+    ghc-options:
+    - -threaded
+    - -with-rtsopts=-N #enable system threading
+    - -with-rtsopts=-qg #disable parallel GC
+    - -rtsopts
