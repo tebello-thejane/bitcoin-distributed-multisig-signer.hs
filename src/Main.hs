@@ -127,7 +127,10 @@ main = do
 
   checkSecurity (testnet options) (configFile options)
 
-  run (port options) $ logStdoutDev $ serve (Proxy @API) $ server cfg
+  let scrAddr = scriptAddr $ redeemScript cfg
+
+  run (port options) $ logStdoutDev $ serve (Proxy @API)
+    $ server scrAddr (PayScriptHash scrAddr) cfg
 
 instance MimeUnrender PlainText Tx where
   mimeUnrender _ bs =
@@ -141,10 +144,8 @@ instance MimeUnrender PlainText Tx where
 
 type API = "sign" :> ReqBody '[PlainText] Tx :> Post '[PlainText] String
 
-server :: Config -> Server API
-server (Config prv scr wl) tx = do
-  let scrAddr = scriptAddr scr
-  let scro = PayScriptHash scrAddr
+server :: Address -> ScriptOutput -> Config -> Server API
+server scrAddr scro (Config prv scr wl) tx = do
   forM_ (txOut tx) $ \txo -> do
     let dso = decodeOutputBS $ scriptOutput txo
     unless (isRight dso) $ throwError $ err400 {errBody = "Bad Tx script output."}
