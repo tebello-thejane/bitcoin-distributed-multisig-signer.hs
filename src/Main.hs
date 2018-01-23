@@ -151,9 +151,9 @@ server (Config prv scr wl) tx = do
     let (Right so) = dso
     case so of
       PayPKHash adr ->
-        when (adr `notElem` scrAddr:wl) $ throwError $ err400 {errBody = "Address " <> toS (show adr) <> " is not in the destination list."}
+        when (adr `notElem` scrAddr:wl) $ throwError $ err403 {errBody = "Address " <> toS (show adr) <> " is not in the destination list."}
       PayScriptHash adr ->
-        when (adr `notElem` scrAddr:wl) $ throwError $ err400 {errBody = "Address " <> toS (show adr) <> " is not in the destination list."}
+        when (adr `notElem` scrAddr:wl) $ throwError $ err403 {errBody = "Address " <> toS (show adr) <> " is not in the destination list."}
       _ -> throwError $ err400 {errBody = "Bad script output type (not an address): " <> toS (show so)}
   let sis = fmap (\(TxIn op _ _) -> SigInput scro op (SigAll False) (Just scr)) (txIn tx)
 
